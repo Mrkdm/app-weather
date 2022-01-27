@@ -56,36 +56,36 @@ const CurrentWeather = () => {
         <div className="container-fluid">
 
             <div className="row mt-5">
-                <div className="col-md-7 ">
+                <div className="col-md-7 mx-auto">
 
-                    <div class="card bg-primary mx-auto" style={{ width: "100%" }}>
-                        <div class="card-body ">
-                            <div class="card-header text-center">
+                    <div className="card bg-primary mx-auto" style={{ width: "100%" }}>
+                        <div className="card-body ">
+                            <div className="card-header text-center">
                                 <img src={` http://openweathermap.org/img/wn/${data && data.icon}@2x.png`} className='img-fluid' alt="" />
                             </div>
-                            <h2 class="card-title display-2 text-center">{data && Math.round(data.temp)}°C</h2>
-                            <h6 class="card-subtitle text-center mb-2 text-muted">{data && data.name} / {data && data.country}</h6>
+                            <h2 className="card-title display-2 text-white text-center">{data && Math.round(data.temp)}°C</h2>
+                            <h6 className="card-subtitle text-center mb-2 text-muted">{data && data.name} / {data && data.country}</h6>
                             <div className="container d-flex justify-content-center">
                                 <div className="d-flex m-1">
                                     <span className={"m-1 " + myStyles.iconStyle}>
                                         <img src={iconViento} className={myStyles.iconStyle} alt="" />
 
                                     </span>
-                                    <p className='m-2'><b>{data && Math.round(data.windSpeed)} m/s </b></p>
+                                    <p className='m-2 text-white'><b>{data && Math.round(data.windSpeed)} m/s </b></p>
 
                                 </div>
                                 <div className="d-flex m-1">
                                     <span className={"m-1 " + myStyles.iconStyle}>
                                         <img src={iconPresion} className={myStyles.iconStyle} alt="" />
                                     </span>
-                                    <p className='m-2'><b>{data && Math.round(data.pressure)} hPa</b></p>
+                                    <p className='m-2 text-white'><b>{data && Math.round(data.pressure)} hPa</b></p>
 
                                 </div>
                                 <div className="d-flex m-1">
                                     <span className={"m-1 " + myStyles.iconStyle}>
                                         <img src={iconHumedad} className={myStyles.iconStyle} alt="" />
                                     </span>
-                                    <p className='m-2'><b>{data && Math.round(data.humidity)}%</b></p>
+                                    <p className='m-2 text-white'><b>{data && Math.round(data.humidity)}%</b></p>
 
                                 </div>
                             </div>
@@ -97,7 +97,7 @@ const CurrentWeather = () => {
                     <div className="row">
                     <Search/>
                     </div>
-                    <div className="card bg-dark">
+                    <div className="card bg-secondary">
                         <div className="card-body">
                             <div className="d-flex p-2">
                                 <h5 className="m-2">Sensación termica:  </h5>
@@ -112,6 +112,8 @@ const CurrentWeather = () => {
                                 <h5 className="m-2">Descripción  </h5>
                                 <p style={{textTransform:"capitalize"}} className="text-success m-2 h5"> {data && data.description} </p>
                             </div>
+
+                         
                            
                             
                             

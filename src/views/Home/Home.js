@@ -7,6 +7,9 @@ const Home = () => {
 
   return (
     <>
+     <div className="page-header text-center mt-4">
+      <h1>Weather App</h1>
+    </div>
     <CurrentWeather/>
     <div className="container-fluid">
     <ForecastWeather/>

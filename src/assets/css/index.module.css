@@ -7,3 +7,55 @@
     width: 32px;
     margin: 3px;
 }
+
+.rotateArrow{
+    transform: rotate(90deg);
+}
+
+
+.tableBg{
+    background: #11111a;
+    color:#fff
+}
+
+.tableHeadBg{
+    background: rgb(45, 57, 184);
+}
+
+
+.bgDay{
+    background-image: url("../imgs/bg-day.jpg");
+    background-size: cover;
+    filter: grayscale(40%);
+    background-repeat: no-repeat;
+}
+
+.bgDay > h2{
+    color: #11111a;
+}
+
+.bgNight{
+    background-image: url("../imgs/bg-night.jpg");
+    background-size: cover;
+    background-position-x: 62%;
+        filter: brightness(86%);
+    background-repeat: no-repeat;
+}
+
+
+
+
+
+
+.progressCircle{
+    margin-top: -10px;
+    margin-left: 20px;
+    height:50px;
+    width:50px;
+
+    transform: rotate(-90deg);
+    -moz-border-radius:25px;
+    -webkit-border-radius:350px;
+    border-radius:35px;
+ 
+}

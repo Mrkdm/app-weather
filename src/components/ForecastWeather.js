@@ -6,13 +6,22 @@ import iconPresion from '../assets/icons/atmosferico.png'
 import iconViento from '../assets/icons/viento.png'
 import iconTemperatura from '../assets/icons/temperatura.png'
 import iconHumedad from '../assets/icons/humidity.png'
+import iconFlecha from '../assets/icons/flecha.png'
 
 const ForecastWeather = () => {
   const [data, setData] = useState(null)
 
+  const [index, setIndex] = useState(0)
+
+  const [fecha, setFecha] = useState(null)
+
+  const [statusWorking, setStatusWorking] = useState(null)
+
+
   const { weatherForecast, getWeatherCall5HourlyGeolocation } = useContext(WeatherContext);
 
 
+  var className = null
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -38,238 +47,182 @@ const ForecastWeather = () => {
       list: weatherForecast.list,
 
     })
-
+    setStatusWorking(statusWorking && data && data.list[0].sys.pod)
 
   }, [weatherForecast])
 
 
-  const unixTimestamp1 = data && data.list[0].dt
-  const milliseconds1 = unixTimestamp1 * 1000
-  const dateObject1 = new Date(milliseconds1)
 
+  const verify = (num, dateObject,work) => {
+   
+    
+    const getIndex = data && data.list.findIndex((objeto, indice, data) => {
+      return objeto.dt === num;
+    })
+    setIndex(getIndex)
+    setFecha(dateObject)
+    setStatusWorking(work)
+  }
 
+ (()=>{
+  switch (statusWorking) {
+    case "n":
+      className = myStyles.bgNight
+      break;
+     case "d":
+       className = myStyles.bgDay
+  
+      
+  }
+ })()
 
-  const unixTimestamp2 = data && data.list[1].dt
-  const milliseconds2 = unixTimestamp2 * 1000
-  const dateObject2 = new Date(milliseconds2)
-
-
-  const unixTimestamp3 = data && data.list[2].dt
-  const milliseconds3 = unixTimestamp3 * 1000
-  const dateObject3 = new Date(milliseconds3)
-
-
-
-  const unixTimestamp4 = data && data.list[3].dt
-  const milliseconds4 = unixTimestamp4 * 1000
-  const dateObject4 = new Date(milliseconds4)
-
-
-
-  const unixTimestamp5 = data && data.list[4].dt
-  const milliseconds5 = unixTimestamp5 * 1000
-  const dateObject5 = new Date(milliseconds5)
-
-
-  const unixTimestamp6 = data && data.list[5].dt
-  const milliseconds6 = unixTimestamp6 * 1000
-  const dateObject6 = new Date(milliseconds6)
-
-
-  const unixTimestamp7 = data && data.list[6].dt
-  const milliseconds7 = unixTimestamp7 * 1000
-  const dateObject7 = new Date(milliseconds7)
-
-  const unixTimestamp8 = data && data.list[7].dt
-  const milliseconds8 = unixTimestamp8 * 1000
-  const dateObject8 = new Date(milliseconds8)
-
+  const dayOne = data && data.list.slice(0, 7);
   return (
     <>
-     <div className="row">
-       <div className="col-lg-6"> <table class="table table-dark mt-5 table-bordered">
-        <thead>
-          <tr className='table-info'>
+      <div className="row">
+        <div className="col-lg-6">
+          <table className={"table mt-5 table-hover " + myStyles.tableBg}>
+            <thead>
+              <tr className={myStyles.tableHeadBg}>
 
-            <th scope="col">Horario</th>
-            <th cope="col">Temperatura</th>
-            <th scope="col">Humedad</th>
-            <th scope="col">Viento</th>
-          </tr>
-        </thead>
-        <tbody>
+                <th scope="col">Horario</th>
+                <th cope="col">Temperatura</th>
+                <th scope="col">Humedad</th>
+                <th scope="col">Viento</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
 
-          {/*SECTION */}
-          <tr>
-            <td>
-              {data && dateObject1.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[0].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[0].main.humidity}%<div class="progress rounded-3">
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[0].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                data && dayOne.map((wthr) => {
+                  const unixTimestamp = data && wthr.dt
+                  const milliseconds = unixTimestamp * 1000
+                  const dateObject = new Date(milliseconds)
+                  return (
+                    <tr key={wthr.dt} onClick={() => verify(wthr.dt, dateObject, wthr.sys.pod)}>
+                      <td>
+                        {data && dateObject.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
+                      </td>
+                      <td>
+                        <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(wthr.main.temp)}
+                        °c
+                      </td>
+                      <td>
+                        <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && wthr.main.humidity}%<div className="progress border border-1 border-dark rounded-3">
+                          <div className="progress-bar bg-info" style={{ width: `${data && wthr.main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td>
+                        <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && wthr.wind.speed}m/S
+                      </td>
+
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+        </div>
+        <div className="col-lg-6">
+          <div className="card mt-5">
+            <div className="card-body">
+              <div className="card-title">
+                <h2>{data && data.name}</h2>
+
+
+
               </div>
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[0].wind.speed}m/S
-            </td>
+              <div className="card-body m-0">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-md-6 col-sm-6" >
+                      {fecha ?
+                        <p className="text-muted">
+                          {fecha && data && fecha.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}
+                          :00
+                        </p> :
+                        <p></p>
+                      }
+                      {index || index == 0 ?
 
-          </tr>
-          {/*SECTION */}
-          <tr>
-            <td>
-              {data && dateObject2.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[1].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[1].main.humidity}%<div class="progress rounded-3">
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[1].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div className="">
+                          <p>Sensación termica</p>
+                          <h2>{data && Math.round(data.list[index].main.feels_like)}°c</h2>
+                          <p>Probabilidad de lluvia</p>
+                          <div className="d-flex">
+                            <h2 className='m-2'>{data && data.list[index].pop * 100}%</h2>
+                            <div className={"progress border border-primary " + myStyles.progressCircle}>
+                              <div className="progress-bar bg-info" style={{ width: `${data && data.list[index].pop * 100}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+                            </div>
+                          </div>
+                          <p>Humedad</p>
+                          <div className="d-flex">
+                            <h2 className='m-2'>{data && Math.round(data.list[index].main.humidity)}%</h2>
+                            <div className={"progress border border-primary " + myStyles.progressCircle}>
+                              <div className="progress-bar" style={{ backgroundColor: "#c9dbec", width: `${data && Math.round(data.list[index].main.humidity)}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+                            </div>
+                          </div>
+
+                          {data && data.list[index].rain
+                            ? <div className="">
+                              <p>Volumen de Lluvia</p>
+                              <div className="d-flex">
+                                <h2>{data && data.list[index].rain['3h']} </h2>
+                                <p className='h5 mt-2'>mm</p>
+                              </div>
+                            </div>
+                            : <div className=""></div>
+
+                          }
+                          <p>Presion Atmosferica</p>
+                          <div className="d-flex">
+                            <h2>{data && data.list[index].main.pressure}</h2>
+                            <p className='h5 mt-2'>pa</p>
+                          </div>
+
+
+                        </div>
+
+
+
+                        : <div></div>
+                      }
+                    </div>
+                    <div className={"col-md-6 col-sm-6 mb-4 " + className}>
+                      <div className="mt-4 text-center">
+                        <img style={{ width: "160px" }} src={` http://openweathermap.org/img/wn/${data && data.list[index].weather[0].icon}@2x.png`} alt="" />
+                      </div>
+                      <h2 className="display-3 text-center">
+                          {Math.round(data && data.list[index].main.temp)}
+                          °c
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-md-4">
+                      <p>Dirección / viento </p>
+                      <img src={iconFlecha} style={{ transform: `rotate(${data && data.list[index].wind.deg}deg)` }} className={myStyles.iconStyle2 + " " + myStyles.rotateArrow} alt="" />
+
+                    </div>
+                    <div className="col-md-4">
+                      <p>Velocidad / viento</p>
+                      <h2>{Math.round(data && data.list[index].wind.speed)} m/S</h2>
+                    </div>
+                    <div className="col-md-4">
+                      <p> Racha / viento</p>
+                      <h2>{Math.round(data && data.list[index].wind.gust)}m/S</h2>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[1].wind.speed}m/S
-            </td>
-
-          </tr>
-
-          {/*SECTION */}
-
-          <tr>
-            <td>
-              {data && dateObject3.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[2].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[2].main.humidity}%<div class="progress rounded-3">
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[2].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[2].wind.speed}m/S
-            </td>
-          </tr>
-
-          {/*SECTION */}
-
-          <tr>
-            <td>
-              {data && dateObject4.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[3].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[3].main.humidity}%<div class="progress rounded-3">
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[3].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[3].wind.speed}m/S
-            </td>
-          </tr>
-          {/*SECTION */}
-
-          <tr>
-            <td>
-              {data && dateObject5.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[4].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[4].main.humidity}%<div class="progress rounded-3">
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[4].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[4].wind.speed}m/S
-            </td>
-          </tr>
-
-          {/*SECTION */}
-          <tr>
-            <td>
-              {data && dateObject6.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[5].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[5].main.humidity}%<div class="progress rounded-3">
-
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[5].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[5].wind.speed}m/S
-            </td>
-          </tr>
-          {/*SECTION */}
-
-          <tr>
-            <td>
-              {data && dateObject7.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[6].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[6].main.humidity}%<div class="progress rounded-3">
-
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[6].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[6].wind.speed}m/S
-            </td>
-          </tr>
-
-
-            {/*SECTION */}
-
-            <tr>
-            <td>
-              {data && dateObject8.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-            </td>
-
-            <td>
-              <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(data.list[7].main.temp)}
-              °c
-            </td>
-            <td>
-              <img src={iconHumedad} className={myStyles.iconStyle2} alt="" />{data && data.list[7].main.humidity}%<div class="progress rounded-3">
-
-                <div class="progress-bar bg-light" style={{ width: `${data && data.list[7].main.humidity}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-
-            </td>
-            <td>
-              <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && data.list[7].wind.speed}m/S
-            </td>
-          </tr>
-
-          
-
-        </tbody>
-      </table></div>
-     </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
