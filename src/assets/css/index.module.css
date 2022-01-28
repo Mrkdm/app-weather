@@ -1,6 +1,6 @@
 .iconStyle{
-    width: 35px;
-    
+    font-size: 30px;    
+    align-items: center;
 }
 
 .iconStyle2{
@@ -42,6 +42,9 @@
     background-repeat: no-repeat;
 }
 
+.bgNigth > h2{
+    color: #11111a;
+}
 
 
 

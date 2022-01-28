@@ -7,8 +7,11 @@ const Home = () => {
 
   return (
     <>
-     <div className="page-header text-center mt-4">
-      <h1>Weather App</h1>
+
+    <div className="page-header">
+      <h1 className="text-center mt-5">
+        Weather App
+      </h1>
     </div>
     <CurrentWeather/>
     <div className="container-fluid">

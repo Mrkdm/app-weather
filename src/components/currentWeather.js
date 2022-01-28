@@ -56,7 +56,7 @@ const CurrentWeather = () => {
         <div className="container-fluid">
 
             <div className="row mt-5">
-                <div className="col-md-7 mx-auto">
+                <div className="col-md-7 col-sm-12 mx-auto">
 
                     <div className="card bg-primary mx-auto" style={{ width: "100%" }}>
                         <div className="card-body ">

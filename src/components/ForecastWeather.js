@@ -15,13 +15,11 @@ const ForecastWeather = () => {
 
   const [fecha, setFecha] = useState(null)
 
-  const [statusWorking, setStatusWorking] = useState(null)
 
 
   const { weatherForecast, getWeatherCall5HourlyGeolocation } = useContext(WeatherContext);
 
 
-  var className = null
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -47,48 +45,51 @@ const ForecastWeather = () => {
       list: weatherForecast.list,
 
     })
-    setStatusWorking(statusWorking && data && data.list[0].sys.pod)
 
   }, [weatherForecast])
 
 
 
-  const verify = (num, dateObject,work) => {
-   
-    
+  const verify = (num, dateObject) => {
+
+
     const getIndex = data && data.list.findIndex((objeto, indice, data) => {
       return objeto.dt === num;
     })
     setIndex(getIndex)
     setFecha(dateObject)
-    setStatusWorking(work)
   }
 
- (()=>{
-  switch (statusWorking) {
-    case "n":
-      className = myStyles.bgNight
-      break;
-     case "d":
-       className = myStyles.bgDay
-  
-      
-  }
- })()
 
   const dayOne = data && data.list.slice(0, 7);
   return (
     <>
       <div className="row">
-        <div className="col-lg-6">
+        <div className="col-lg-6 col-sm-">
           <table className={"table mt-5 table-hover " + myStyles.tableBg}>
             <thead>
               <tr className={myStyles.tableHeadBg}>
 
-                <th scope="col">Horario</th>
-                <th cope="col">Temperatura</th>
-                <th scope="col">Humedad</th>
-                <th scope="col">Viento</th>
+                <th scope="col">
+                  <span className="text-center">
+                    <i class={"fas fa-clock " + myStyles.iconStyle}></i>
+                  </span>
+                </th>
+                <th cope="col">
+                  <span className="text-center">
+                    <i class={"fas fa-thermometer-half " + myStyles.iconStyle}></i>
+                  </span>
+                </th>
+                <th scope="col">
+                  <span className="text-center">
+                    <i class={"fas fa-tint " + myStyles.iconStyle}></i>
+                  </span>
+                </th>
+                <th scope="col">
+                  <span className="text-center">
+                    <i class={"fas fa-wind " + myStyles.iconStyle}></i>
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -99,11 +100,11 @@ const ForecastWeather = () => {
                   const milliseconds = unixTimestamp * 1000
                   const dateObject = new Date(milliseconds)
                   return (
-                    <tr key={wthr.dt} onClick={() => verify(wthr.dt, dateObject, wthr.sys.pod)}>
-                      <td>
-                        {data && dateObject.toLocaleString("es-ES", { weekday: "long", hour: "numeric" })}:00
-                      </td>
-                      <td>
+                    <tr key={wthr.dt} onClick={() => verify(wthr.dt, dateObject)}>
+                      <td scope='row'>
+                        {data && dateObject.toLocaleString("es-ES", { hour: "numeric" })}:00
+                      </td >
+                      <td >
                         <img src={iconTemperatura} className={myStyles.iconStyle2} alt="" />{data && Math.round(wthr.main.temp)}
                         °c
                       </td>
@@ -150,7 +151,7 @@ const ForecastWeather = () => {
                           <h2>{data && Math.round(data.list[index].main.feels_like)}°c</h2>
                           <p>Probabilidad de lluvia</p>
                           <div className="d-flex">
-                            <h2 className='m-2'>{data && data.list[index].pop * 100}%</h2>
+                            <h2 className='m-2'>{Math.round(data && data.list[index].pop * 100)}%</h2>
                             <div className={"progress border border-primary " + myStyles.progressCircle}>
                               <div className="progress-bar bg-info" style={{ width: `${data && data.list[index].pop * 100}%` }} role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 
@@ -190,14 +191,34 @@ const ForecastWeather = () => {
                         : <div></div>
                       }
                     </div>
-                    <div className={"col-md-6 col-sm-6 mb-4 " + className}>
+                    <div className="col-md-6 col-sm-6 mb-4 bg-light ">
                       <div className="mt-4 text-center">
                         <img style={{ width: "160px" }} src={` http://openweathermap.org/img/wn/${data && data.list[index].weather[0].icon}@2x.png`} alt="" />
                       </div>
                       <h2 className="display-3 text-center">
-                          {Math.round(data && data.list[index].main.temp)}
-                          °c
+                        {Math.round(data && data.list[index].main.temp)}
+                        °c
                       </h2>
+                      <h4 style={{ textTransform: "capitalize" }} className='text-center'>
+                        {data && data.list[index].weather[0].description}
+                      </h4>
+                      
+                      
+                      <div className="row">
+                        <div className="col-lg-6 col-md-6">
+                          <div className="text-center">
+                            <p className="">Temp / max </p>
+                            <p className="">{Math.round(data && data.list[index].main.temp_max)}°c</p>
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-6">
+                        <div className="text-center">
+                            <p className="">Temp / min </p>
+                            <p className=""> {Math.round(data && data.list[index].main.temp_min)}°c</p>
+                          </div>
+                        </div>
+                    
+                      </div>
                     </div>
                   </div>
                 </div>
