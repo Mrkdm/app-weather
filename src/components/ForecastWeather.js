@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import WeatherContext from '../context/weatherContext';
 import myStyles from '../assets/css/index.module.css'
 
-import iconPresion from '../assets/icons/atmosferico.png'
 import iconViento from '../assets/icons/viento.png'
 import iconTemperatura from '../assets/icons/temperatura.png'
 import iconHumedad from '../assets/icons/humidity.png'
@@ -29,7 +28,7 @@ const ForecastWeather = () => {
       }
       getWeatherCall5HourlyGeolocation(coo)
     })
-  }, []);
+  }, [getWeatherCall5HourlyGeolocation]);
 
   console.log(weatherForecast)
 
@@ -65,7 +64,7 @@ const ForecastWeather = () => {
   return (
     <>
       <div className="row">
-        <div className="col-lg-6 col-sm-">
+        <div className="col-lg-5 col-sm-12">
           <table className={"table mt-5 table-hover " + myStyles.tableBg}>
             <thead>
               <tr className={myStyles.tableHeadBg}>
@@ -75,17 +74,17 @@ const ForecastWeather = () => {
                     <i class={"fas fa-clock " + myStyles.iconStyle}></i>
                   </span>
                 </th>
-                <th cope="col">
+                <th scope="">
                   <span className="text-center">
                     <i class={"fas fa-thermometer-half " + myStyles.iconStyle}></i>
                   </span>
                 </th>
-                <th scope="col">
+                <th scope="">
                   <span className="text-center">
                     <i class={"fas fa-tint " + myStyles.iconStyle}></i>
                   </span>
                 </th>
-                <th scope="col">
+                <th scope="">
                   <span className="text-center">
                     <i class={"fas fa-wind " + myStyles.iconStyle}></i>
                   </span>
@@ -101,7 +100,7 @@ const ForecastWeather = () => {
                   const dateObject = new Date(milliseconds)
                   return (
                     <tr key={wthr.dt} onClick={() => verify(wthr.dt, dateObject)}>
-                      <td scope='row'>
+                      <td itemScope='row'>
                         {data && dateObject.toLocaleString("es-ES", { hour: "numeric" })}:00
                       </td >
                       <td >
@@ -114,7 +113,7 @@ const ForecastWeather = () => {
                         </div>
                       </td>
                       <td>
-                        <img src={iconViento} className={myStyles.iconStyle2} alt="" />{data && wthr.wind.speed}m/S
+                        <img src={iconViento} className={myStyles.iconStyle2} alt="" />{Math.round(data && wthr.wind.speed)}m/S
                       </td>
 
                     </tr>
@@ -124,7 +123,7 @@ const ForecastWeather = () => {
             </tbody>
           </table>
         </div>
-        <div className="col-lg-6">
+        <div className="col-lg-7">
           <div className="card mt-5">
             <div className="card-body">
               <div className="card-title">
@@ -144,7 +143,7 @@ const ForecastWeather = () => {
                         </p> :
                         <p></p>
                       }
-                      {index || index == 0 ?
+                      {index || index === 0 ?
 
                         <div className="">
                           <p>Sensación termica</p>
@@ -202,8 +201,8 @@ const ForecastWeather = () => {
                       <h4 style={{ textTransform: "capitalize" }} className='text-center'>
                         {data && data.list[index].weather[0].description}
                       </h4>
-                      
-                      
+
+
                       <div className="row">
                         <div className="col-lg-6 col-md-6">
                           <div className="text-center">
@@ -212,19 +211,19 @@ const ForecastWeather = () => {
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
-                        <div className="text-center">
+                          <div className="text-center">
                             <p className="">Temp / min </p>
                             <p className=""> {Math.round(data && data.list[index].main.temp_min)}°c</p>
                           </div>
                         </div>
-                    
+
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="container-fluid">
                   <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-5">
                       <p>Dirección / viento </p>
                       <img src={iconFlecha} style={{ transform: `rotate(${data && data.list[index].wind.deg}deg)` }} className={myStyles.iconStyle2 + " " + myStyles.rotateArrow} alt="" />
 
